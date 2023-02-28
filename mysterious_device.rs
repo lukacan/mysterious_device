@@ -6,6 +6,8 @@ use std::sync::{Arc, Mutex};
 const BASE: u32 = 10;
 const MODULO:u32 = BASE.pow(9) + 7;
 
+const BASE_: usize = 10;
+const MAXIMUM:usize = BASE_.pow(10);
 
 mod secret{
     pub struct Phase{
@@ -26,7 +28,7 @@ mod secret{
     }
 }
 #[allow(dead_code)] 
-fn compute_seq(phases: &mut Vec<secret::Phase>, max_x: &u64){
+fn compute_seq(phases: &mut Vec<secret::Phase>, max_x: &usize){
     let first = secret::Phase::new(1,1);
     let second = secret::Phase::new(2,3);
     let third = secret::Phase::new(3,6);
@@ -40,7 +42,7 @@ fn compute_seq(phases: &mut Vec<secret::Phase>, max_x: &u64){
     let mut dummy_so_far = phases[phases.len()-1].get_so_far();
     
     let mut dummy_counter = phases.len();
-    while dummy_counter < *max_x as usize{
+    while dummy_counter < *max_x{
         let vec_len = phases.len();
         let second_last = &phases[vec_len-2].get_copies();
         let fourth_last = &phases[vec_len-4].get_copies();
@@ -53,7 +55,7 @@ fn compute_seq(phases: &mut Vec<secret::Phase>, max_x: &u64){
     }
 }
 #[allow(dead_code)]
-fn compute_par(phases: &mut Vec<secret::Phase>, max_x_c: &Arc<Mutex<u64>>){
+fn compute_par(phases: &mut Vec<secret::Phase>, max_x_c: &Arc<Mutex<usize>>){
     let first = secret::Phase::new(1,1);
     let second = secret::Phase::new(2,3);
     let third = secret::Phase::new(3,6);
@@ -69,7 +71,7 @@ fn compute_par(phases: &mut Vec<secret::Phase>, max_x_c: &Arc<Mutex<u64>>){
     
     
     let mut dummy_counter:usize = phases.len();
-    let mut over_all_max = 10000000000;
+    let mut over_all_max:usize = MAXIMUM;
     while dummy_counter < over_all_max{
         if dummy_counter % 1000 == 0{
             let max_x = max_x_c.lock().unwrap();
@@ -89,11 +91,11 @@ fn compute_par(phases: &mut Vec<secret::Phase>, max_x_c: &Arc<Mutex<u64>>){
     } 
 }
 
-fn read_num(read_into:&mut u64) ->Result<(),()> {
+fn read_num(read_into:&mut usize) ->Result<(),()> {
     let mut input_string: String = String::new();
     match io::stdin().read_line(&mut input_string){
         Ok(_n) =>{
-            match input_string.trim().parse::<u64>(){
+            match input_string.trim().parse::<usize>(){
                 Ok(f)=>{
                     *read_into = f;
                     return Ok(())
@@ -109,9 +111,9 @@ fn read_num(read_into:&mut u64) ->Result<(),()> {
     }
 }
 
-fn output_solution(x: &Vec<u64>, phases: &Vec::<secret::Phase>){
+fn output_solution(x: &Vec<usize>, phases: &Vec::<secret::Phase>){
     for iter in x{
-        println!("{}",phases[(iter-1) as usize].get_so_far());
+        println!("{}",phases[iter-1].get_so_far());
     }
     // assert_eq!(phases[6].get_so_far(), 64);
     // assert_eq!(phases[4].get_so_far(), 20);
@@ -119,9 +121,9 @@ fn output_solution(x: &Vec<u64>, phases: &Vec::<secret::Phase>){
     // assert_eq!(phases[30].get_copies(), 20330163);
     // assert_eq!(phases[21].get_copies(), 128801);
 }
-fn read_input(x: &mut Vec<u64>, max_x: &mut u64){
-    let mut questions: u64 = 0;
-    let mut dummy_x: u64 = 0;
+fn read_input(x: &mut Vec<usize>, max_x: &mut usize){
+    let mut questions: usize = 0;
+    let mut dummy_x: usize = 0;
     let mut dummy = 0;
 
     match read_num(&mut questions) {
@@ -140,7 +142,7 @@ fn read_input(x: &mut Vec<u64>, max_x: &mut u64){
     while dummy < questions{
         match read_num(&mut dummy_x) {
             Ok(_) => {
-                if dummy_x < 4 || dummy_x > 10000000000{
+                if dummy_x < 4 || dummy_x > MAXIMUM{
                     println!("Out of bounds");
                     x.clear();
                     *max_x = 0;
@@ -177,9 +179,9 @@ fn parallel(){
     //! so we do not save enough time to speed up 
     //! the process by parallelizing it.
     let mut dummy_max_x = 0;
-    let max_x = Arc::new(Mutex::new(10000000000));
+    let max_x = Arc::new(Mutex::new(MAXIMUM));
     let mut phases = Vec::<secret::Phase>::new();
-    let mut x: Vec<u64> = Vec::new();
+    let mut x: Vec<usize> = Vec::new();
 
     let max_x_c = Arc::clone(&max_x);
     let max_x_r = Arc::clone(&max_x);
@@ -209,9 +211,9 @@ fn parallel(){
 fn sequential(){
     //! call operations sequentially, so firstly read input, then
     //! compute values recurrsively until max
-    let mut x: Vec<u64> = Vec::new();
+    let mut x: Vec<usize> = Vec::new();
     let mut phases = Vec::<secret::Phase>::new();
-    let mut max_x:u64 = 0;
+    let mut max_x:usize = 0;
 
     read_input(&mut x, &mut max_x);
     compute_seq(&mut phases, &max_x);
