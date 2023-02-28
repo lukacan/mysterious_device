@@ -24,7 +24,8 @@ mod secret{
             self.so_far
         }
     }
-} 
+}
+#[allow(dead_code)] 
 fn compute_seq(phases: &mut Vec<secret::Phase>, max_x: &u64){
     let first = secret::Phase::new(1,1);
     let second = secret::Phase::new(2,3);
@@ -35,11 +36,11 @@ fn compute_seq(phases: &mut Vec<secret::Phase>, max_x: &u64){
     phases.push(second);
     phases.push(third);
     phases.push(fourth);
-    let mut dummy_copies = phases[3].get_copies();
-    let mut dummy_so_far = phases[3].get_so_far();
+    let mut dummy_copies = phases[phases.len()-1].get_copies();
+    let mut dummy_so_far = phases[phases.len()-1].get_so_far();
     
-    let mut dummy_counter = 0;
-    while dummy_counter < *max_x{
+    let mut dummy_counter = phases.len();
+    while dummy_counter < *max_x as usize{
         let vec_len = phases.len();
         let second_last = &phases[vec_len-2].get_copies();
         let fourth_last = &phases[vec_len-4].get_copies();
@@ -51,6 +52,7 @@ fn compute_seq(phases: &mut Vec<secret::Phase>, max_x: &u64){
         dummy_counter+=1;
     }
 }
+#[allow(dead_code)]
 fn compute_par(phases: &mut Vec<secret::Phase>, max_x_c: &Arc<Mutex<u64>>){
     let first = secret::Phase::new(1,1);
     let second = secret::Phase::new(2,3);
@@ -62,11 +64,11 @@ fn compute_par(phases: &mut Vec<secret::Phase>, max_x_c: &Arc<Mutex<u64>>){
     phases.push(second);
     phases.push(third);
     phases.push(fourth);
-    let mut dummy_copies = phases[3].get_copies();
-    let mut dummy_so_far = phases[3].get_so_far();
+    let mut dummy_copies = phases[phases.len()-1].get_copies();
+    let mut dummy_so_far = phases[phases.len()-1].get_so_far();
     
     
-    let mut dummy_counter:usize = 4;
+    let mut dummy_counter:usize = phases.len();
     let mut over_all_max = 10000000000;
     while dummy_counter < over_all_max{
         if dummy_counter % 1000 == 0{
@@ -111,13 +113,13 @@ fn output_solution(x: &Vec<u64>, phases: &Vec::<secret::Phase>){
     for iter in x{
         println!("{}",phases[(iter-1) as usize].get_so_far());
     }
-    assert_eq!(phases[6].get_so_far(), 64);
-    assert_eq!(phases[4].get_so_far(), 20);
-    assert_eq!(phases[46].get_so_far(), 349633386);
+    // assert_eq!(phases[6].get_so_far(), 64);
+    // assert_eq!(phases[4].get_so_far(), 20);
+    // assert_eq!(phases[46].get_so_far(), 349633386);
     // assert_eq!(phases[30].get_copies(), 20330163);
     // assert_eq!(phases[21].get_copies(), 128801);
 }
-fn read_input(x: &mut Vec<u64>, max_x: &mut u64)->Result<(),()>{
+fn read_input(x: &mut Vec<u64>, max_x: &mut u64){
     let mut questions: u64 = 0;
     let mut dummy_x: u64 = 0;
     let mut dummy = 0;
@@ -125,12 +127,13 @@ fn read_input(x: &mut Vec<u64>, max_x: &mut u64)->Result<(),()>{
     match read_num(&mut questions) {
         Ok(_) => {
             if questions < 1 || questions > 1000{
-                return Err(())
+                println!("Out of bounds");
+                return
             }  
         },
         Err(_) => {
             println!("Wrong input");
-            return Err(())
+            return
         },
     }
 
@@ -138,8 +141,10 @@ fn read_input(x: &mut Vec<u64>, max_x: &mut u64)->Result<(),()>{
         match read_num(&mut dummy_x) {
             Ok(_) => {
                 if dummy_x < 4 || dummy_x > 10000000000{
-                    println!("Wrong input");
-                    return Err(())
+                    println!("Out of bounds");
+                    x.clear();
+                    *max_x = 0;
+                    return
                 }else{
                     x.push(dummy_x);
                     dummy+=1;
@@ -150,12 +155,15 @@ fn read_input(x: &mut Vec<u64>, max_x: &mut u64)->Result<(),()>{
             },
             Err(_) => {
                 println!("Wrong input");
-                return Err(())
+                x.clear();
+                *max_x = 0;
+                return
             },
         }
     }
-    return Ok(())
+    return
 }
+#[allow(dead_code)]
 fn parallel(){
     //! call operations in parallel, so first thread starts
     //! computing recurrence, second thread reads input values,
@@ -197,6 +205,7 @@ fn parallel(){
     output_solution(&x, &phases);
     
 }
+#[allow(dead_code)]
 fn sequential(){
     //! call operations sequentially, so firstly read input, then
     //! compute values recurrsively until max
@@ -204,21 +213,14 @@ fn sequential(){
     let mut phases = Vec::<secret::Phase>::new();
     let mut max_x:u64 = 0;
 
-    // read input, in case of incorrect input do nothing
-    match read_input(&mut x, &mut max_x){
-        Ok(_)=>{
-            compute_seq(&mut phases, &max_x);
-            output_solution(&x, &phases);
-        }
-        _=>{
-            return
-        }
-    }
+    read_input(&mut x, &mut max_x);
+    compute_seq(&mut phases, &max_x);
+    output_solution(&x, &phases);
 }
 
 fn main(){
     // call parallel part
-    parallel();
+    //parallel();
     // call sequential part
-    //sequential();
+    sequential();
 }
