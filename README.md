@@ -59,7 +59,7 @@ Run:
 ./mysterious_device
 ```
 
-## Appendix
+## Testing
 I created simple shell script for generating test inputs.<br />
 Usage:
 ```
