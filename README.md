@@ -43,6 +43,40 @@ S(n-4) = F(n) - F(3) - (S(n-4) + F(n-3) + F(n-2) - F(0) - F(1))<br />
 2(S(n-4)) = F(n) - F(3) - F(n-3) - F(n-2) + F(0) + F(1)
 
 That leads us to the question if it`s possible to find F(n) in better than O(n). We have to find formula for computing straight F(n) or try to find algorithm to compute F(n) in maybe O(log n). I tried to use Python to solve Linear reccurent function with constant coeficients, but did not find any that could descibe sequence correctly. Second try was to find Donald E. Knuth's matrix identity (used for Fibonacci sequence) that can lead to O(log n) with some effective matrix multiplication.
-[The Nth Fibonacci Number in O(log N)](https://kukuruku.co/hub/algorithms/the-nth-fibonacci-number-in-olog-n).
+[The Nth Fibonacci Number in O(log N)](https://kukuruku.co/hub/algorithms/the-nth-fibonacci-number-in-olog-n), also unsuccessful.
+
+### Final solution
+Based on results from previous approaches, my solution works in O(n) time complexity. Memory complexity is also O(n), but this can be improved. Currently my solution stores all values until n. Certainly, that is not necenecessary because we know all requested ns in advance.
+
+
+## Run
+Compile:
+```
+rustc mysterious_device.rs
+```
+Run:
+```
+./mysterious_device
+```
+
+## Appendix
+I created simple shell script for generating test inputs.<br />
+Usage:
+```
+./generate_random.sh T X_Max
+```
+T = number of questions<br />
+X_Max = max question number<br />
+Output file is generated as "input_T", where content of file has format generateed exactly as required input:
+```
+T
+Q1
+Q2
+Q3
+.
+.
+.
+QT
+```
 
 
