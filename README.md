@@ -27,15 +27,16 @@ Second approach which could lead us to better time complexity so faster than O(n
 <br />
 Let`s assume:
 <br />
+```
 F(n-4) + F(n-2) = F(n) - F(n-1)<br />
 F(n-5) + F(n-3) = F(n-1) - F(n-2)<br />
 F(n-6) + F(n-4) = F(n-2) - F(n-3)<br />
-.<br />
-.<br />
-.<br />
+.
+.
+.
 F(0) + F(2) = F(4) - F(3)<br />
-S(n-4) = F(n) - F(3) - (S(n-2) - F(0) - F(1))   
-<br />
+S(n-4) = F(n) - F(3) - (S(n-2) - F(0) - F(1))
+```   
 so
 <br />
 
