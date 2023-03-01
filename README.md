@@ -66,7 +66,7 @@ Usage:
 ./generate_random.sh T X_Max
 ```
 T = number of questions<br />
-X_Max = max question number<br />
+X_Max = max question number (4-X_Max)<br />
 Output file is generated as "input_T", where content of file has format generateed exactly as required input:
 ```
 T
