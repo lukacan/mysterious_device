@@ -28,21 +28,20 @@ Second approach which could lead us to better time complexity so faster than O(n
 Let`s assume:
 <br />
 ```
-F(n-4) + F(n-2) = F(n) - F(n-1)<br />
-F(n-5) + F(n-3) = F(n-1) - F(n-2)<br />
-F(n-6) + F(n-4) = F(n-2) - F(n-3)<br />
+F(n-4) + F(n-2) = F(n) - F(n-1)
+F(n-5) + F(n-3) = F(n-1) - F(n-2)
+F(n-6) + F(n-4) = F(n-2) - F(n-3)
 .
 .
 .
-F(0) + F(2) = F(4) - F(3)<br />
+F(0) + F(2) = F(4) - F(3)
 S(n-4) = F(n) - F(3) - (S(n-2) - F(0) - F(1))
 ```   
 so
-<br />
-
-S(n-4) = F(n) - F(3) - (S(n-4) + F(n-3) + F(n-2) - F(0) - F(1))<br />
+```
+S(n-4) = F(n) - F(3) - (S(n-4) + F(n-3) + F(n-2) - F(0) - F(1))
 2(S(n-4)) = F(n) - F(3) - F(n-3) - F(n-2) + F(0) + F(1)
-
+```
 That leads us to the question if it`s possible to find F(n) in better than O(n). We have to find formula for computing straight F(n) or try to find algorithm to compute F(n) in maybe O(log n). I tried to use Python to solve Linear reccurent function with constant coeficients, but did not find any that could descibe sequence correctly. Second try was to find Donald E. Knuth's matrix identity (used for Fibonacci sequence) that can lead to O(log n) with some effective matrix multiplication.
 [The Nth Fibonacci Number in O(log N)](https://kukuruku.co/hub/algorithms/the-nth-fibonacci-number-in-olog-n), also unsuccessful.
 
