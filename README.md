@@ -67,7 +67,7 @@ Usage:
 ```
 T = number of questions<br />
 X_Max = max question number (4-X_Max)<br />
-Output file is generated as "input_T", where content of file has format generateed exactly as required input:
+Output file is generated as "input_T" inside current directory, where content of file has format generateed exactly as required input:
 ```
 T
 Q1
