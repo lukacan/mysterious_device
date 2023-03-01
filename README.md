@@ -42,7 +42,7 @@ so
 S(n-4) = F(n) - F(3) - (S(n-4) + F(n-3) + F(n-2) - F(0) - F(1))
 2(S(n-4)) = F(n) - F(3) - F(n-3) - F(n-2) + F(0) + F(1)
 ```
-That leads us to the question if it`s possible to find F(n) in better than O(n). We have to find formula for computing straight F(n) or try to find algorithm to compute F(n) in better than O(n). I tried to use Python to solve Linear reccurent function with constant coeficients, but did not find any that could descibe sequence correctly. Second try was to find Donald E. Knuth's matrix identity (used for Fibonacci sequence) that can lead to O(log n) with some effective matrix multiplication.
+That leads us to the question if it`s possible to find F(n) in better than O(n). We have to find formula for computing straight F(n) or try to find algorithm to compute F(n) in better than O(n). I tried to use Python to solve Linear reccurent function with constant coeficients, but did not find any that could describe sequence correctly. Second try was to find Donald E. Knuth's matrix identity (used for Fibonacci sequence) that can lead to O(log n) with some effective matrix multiplication.
 [The Nth Fibonacci Number in O(log N)](https://kukuruku.co/hub/algorithms/the-nth-fibonacci-number-in-olog-n), also unsuccessful.
 
 ### Final solution
